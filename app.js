@@ -24,9 +24,8 @@ app.get('/itprofessional', async (request, response) => {
     }
 });
 
-app.get('/api/2022/holamundo/:name', (request, response) =>
-{
-    let hola = { message: "hello " + request.params.name};
+app.get('/api/2022/holamundo/:name', (request, response) => {
+    let hola = { message: "hello " + request.params.name };
     response.send(hola);
 });
 
@@ -43,11 +42,48 @@ app.get('/itprofessional/:id/', async (request, response) => {
 
 //POST guardar datos
 app.post('/itprofessional/', async (request, response) => {
-    console.log(request.url, request.body);
-    response.sendStatus(200);
+    /*if(request.headers.clave_secreta && request.headers.clave_secreta == "QWERTY")
+    {
+        console.log("OK secret key");
+        response.sendStatus(200);
+    }else{
+        console.log("Error secret key");
+        response.sendStatus(500);
+    }*/
+    try {
+        var result = await ITController.save(request.body)
+        console.log(result);
+        response.sendStatus(200);
+    } catch (err) {
+        console.log(err);
+        response.sendStatus(500);
+    }
 })
 
-//PUT para actualizar datos
+//PUT - PATCH para actualizar datos
+app.put('/itprofessional/:id', async (request, response) => {
+    try {
+        console.log(request.params.id);
 
+        var result = await ITController.update(request.params.id, { verifyed: true });
+        console.log(result);
+        response.sendStatus(200);
+    } catch (err) {
+        console.log(err);
+        response.sendStatus(500);
+    }
+})
 
 //DELETE para borrar datos
+
+app.delete('/itprofessional/:id', async (request, response) => {
+    console.log('delete method');
+    try {
+        const result = await ITController.delete(request.params.id);
+        console.log(result);
+        response.sendStatus(200);
+    } catch (err) {
+        console.log(err)
+        response.sendStatus(500);
+    }
+})

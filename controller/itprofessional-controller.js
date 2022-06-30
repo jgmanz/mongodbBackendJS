@@ -18,13 +18,18 @@ export class itprofessionalController {
     async save(body) {
         const mongodb = new Mongodb();
         const data = await mongodb.saveData(this.collectionName, body);
-        response.send(data);
+        return data;
 
     }
-    async save(body) {
+    async update(id, body) {
         const mongodb = new Mongodb();
-        const data = await mongodb.saveData(this.collectionName, body);
-        response.send(data);
-
+        const data = await mongodb.updateData(this.collectionName, id, body);
+        return (data); 
+    }
+    async delete(id)
+    {
+        const mongodb = new Mongodb();
+        const deleteData = mongodb.deleteData(this.collectionName, id);
+        return deleteData;
     }
 }

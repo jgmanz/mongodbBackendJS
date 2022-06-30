@@ -1,5 +1,5 @@
 
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 export class Mongodb {
     // client = new MongoClient();
     database_name = 'itrrhh';
@@ -12,6 +12,21 @@ export class Mongodb {
     }
     async saveData(collection, object) {
         const conn = await MongoClient.connect(this.db_url);
-        return await conn.db(this.database_name).collection(collection).insertOne();
+        return await conn.db(this.database_name).collection(collection).insertOne(object)
     }
+    async updateData(collection, id, object) {
+        const conn = await MongoClient.connect(this.db_url);
+        return await conn.db(this.database_name).collection(collection)
+            .updateOne(
+                { _id: ObjectId(id) },
+                { $set: object }
+            );
+    }
+
+    async deleteData(collection, id) {
+        const conn = await MongoClient.connect(this.db_url);
+        return await conn.db(this.database_name).collection(collection)
+            .deleteOne({_id: ObjectId(id)})
+    }
+
 }
